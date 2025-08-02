@@ -1,0 +1,93 @@
+🛠️ Project Architecture Overview (Using n8n)
+Core Flow:
+
+User inputs profile data (skills, education, interests).
+
+Agent queries job and course APIs.
+
+Agent processes and ranks results.
+
+User receives a summary (on-screen or via email/SMS).
+
+Logs saved to SQLite or Firebase.
+
+Agent learns/improves (basic retraining/feedback).
+
+👥 Task Distribution (7 Members)
+🧑‍💻 Member 1: Frontend & User Input UI
+Build the simple UI using Streamlit or HTML + JS.
+
+Form to collect: name, skills, education, interests.
+
+Trigger webhook to n8n on submit.
+
+Connect with n8n via HTTP node.
+
+Optional: Add spinner/loading + summary UI.
+
+🧑‍💻 Member 2: n8n Orchestration & Flow Designer
+Set up main agent flow in n8n:
+
+Webhook node for user input
+
+Pass to LangChain/OpenAI node
+
+Call job APIs
+
+Call course APIs
+
+Format result → send back to frontend
+
+Handle error & fallback flows.
+
+Optional: Add SMS/email node (e.g., Twilio, Gmail).
+
+🧑‍💻 Member 3: Job API Integration
+Integrate job APIs (e.g., Naukri, RapidAPI LinkedIn Jobs).
+
+Design functions to fetch jobs based on:
+
+User location, skills, interest
+
+Format job result to clean JSON.
+
+Add authentication if needed (API keys, headers).
+
+🧑‍💻 Member 4: Course Recommendation Integration
+Use platforms like Coursera, YouTube Data API, or Udemy.
+
+Filter courses based on user skill gap.
+
+Clean & rank results using relevance.
+
+Send to the main n8n flow.
+
+🧑‍💻 Member 5: AI Agent (LangChain/OpenAI)
+Create a LangChain agent (Python) to:
+
+Analyze user input.
+
+Summarize job & course data.
+
+Generate actionable recommendations.
+
+Integrate with n8n using Execute Command or Webhook.
+
+🧑‍💻 Member 6: Database & Logging
+Set up SQLite or Firebase.
+
+Design schema: user_id, inputs, timestamp, job list, course list, agent summary.
+
+Add insert/update nodes in n8n.
+
+Optionally: fetch past records for personalized recs.
+
+🧑‍💻 Member 7: Email/SMS Integration + Testing
+Integrate Twilio (SMS) or Gmail API (email).
+
+Format and send summaries using n8n.
+
+Add buttons: “Email me this” / “Send to WhatsApp”.
+
+Do final E2E testing and bug fixing.
+
