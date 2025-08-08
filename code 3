@@ -1,0 +1,36 @@
+const inputs = await $input.all();
+
+let summary = '';
+let jobs = [];
+let courses = [];
+
+// Loop through all incoming node data
+for (const item of inputs) {
+  const data = item.json;
+
+  // Collect job results
+  if (data.jobs_results && Array.isArray(data.jobs_results)) {
+    jobs.push(...data.jobs_results);
+  }
+
+  // Collect courses
+  if (data.courses && Array.isArray(data.courses)) {
+    courses.push(...data.courses);
+  }
+
+  // Get summary from any input that has it
+  if (data.summary) {
+    summary = data.summary;
+  }
+}
+
+// Final return
+return [
+  {
+    json: {
+      summary:$('Code1').first().json.summary,
+      jobs:$('Code1').first().json.jobs,
+      courses:$('Code1').first().json.courses
+    }
+  }
+];
