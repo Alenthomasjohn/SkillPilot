@@ -1,0 +1,82 @@
+const inputs = await $input.all();
+
+// Collect all incoming data
+let summary = '';
+let jobs = [];
+let courses = [];
+let gmail = '';
+
+// Loop through each input item
+for (const item of inputs) {
+  if (item.json.jobs) {
+    if (Array.isArray(item.json.jobs)) {
+      jobs.push(...item.json.jobs);
+    } else {
+      jobs.push(item.json.jobs);
+    }
+    summary = item.json.summary || summary;
+    gmail = item.json.gmail || gmail;
+  }
+
+  if (item.json.courses) {
+    if (Array.isArray(item.json.courses)) {
+      courses.push(...item.json.courses);
+    } else {
+      courses.push(item.json.courses);
+    }
+    summary = item.json.summary || summary;
+    gmail = item.json.gmail || gmail;
+  }
+}
+
+// Prepare HTML content
+let html = `<h2>🎯 Job Recommendations</h2>`;
+
+// Summary
+if (summary) {
+  html += `<p><strong>Summary:</strong> ${summary}</p>`;
+}
+
+// Job section
+if (jobs.length > 0) {
+  for (const job of jobs) {
+    html += `
+      <hr>
+      <p>
+        <strong>${job.title}</strong> at <em>${job.company_name}</em><br>
+        🔗 <a href="${job.share_link}" target="_blank">Apply Here</a>
+      </p>
+    `;
+  }
+} else {
+  html += `<p>No job recommendations available.</p>`;
+}
+
+// Course section
+html += `<h2>📚 Course Recommendations</h2>`;
+
+if (courses.length > 0) {
+  for (const course of courses) {
+    html += `
+      <p>
+        <strong>${course.title}</strong><br>
+        🔗 <a href="${course.link}" target="_blank">View Course</a>
+      </p>
+    `;
+  }
+} else {
+  html += `<p>No course recommendations available.</p>`;
+}
+
+// Return to UI
+return [
+  {
+    json: {
+      gmail,
+      emailBody: html,
+      summary,
+      jobs,
+      courses
+    }
+  }
+];
