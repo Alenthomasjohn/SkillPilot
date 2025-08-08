@@ -1,0 +1,47 @@
+const jobs = $input.first().json.jobs || [];
+const courses = $input.first().json.courses || [];
+
+let emailBody = `<h2>🎯 Job Recommendations</h2>`;
+emailBody += `<p><strong>Summary:</strong> Found ${jobs.length} jobs and ${courses.length} courses for you.</p>`;
+
+if (jobs.length > 0) {
+  jobs.forEach(job => {
+    emailBody += `
+      <hr>
+      <p>
+        <strong>${job.title}</strong> at <em>${job.company}</em> (${job.location})<br>
+        🔗 <a href="${job.link}" target="_blank">Apply Here</a>
+      </p>
+    `;
+  });
+} else {
+  emailBody += `<p>No job recommendations available.</p>`;
+}
+
+emailBody += `<h2>📚 Course Recommendations</h2>`;
+
+if (courses.length > 0) {
+  courses.forEach(course => {
+    emailBody += `
+      <hr>
+      <p>
+        <strong>${course.title}</strong><br>
+        🔗 <a href="${course.link}" target="_blank">View Course</a>
+      </p>
+    `;
+  });
+} else {
+  emailBody += `<p>No course recommendations available.</p>`;
+}
+
+return [
+  {
+    json: {
+      gmail: "u2203031@rajagiri.edu.in", // or dynamic user email
+      emailBody,
+      summary: `Found ${jobs.length} jobs and ${courses.length} courses for you.`,
+      jobs,
+      courses
+    }
+  }
+];
