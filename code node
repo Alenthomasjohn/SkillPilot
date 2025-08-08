@@ -1,0 +1,41 @@
+const jobsData = $('job').first().json.jobs_results || [];
+const coursesData = $input.first().json.related_questions[0].references|| [];
+
+// --- JOBS Extraction ---
+const jobs = jobsData.map(job => {
+  let applyLink = job.link || '';
+
+  if (job.apply_options && job.apply_options.length > 0) {
+    const directLink = job.apply_options.find(option =>
+      option.link && !option.link.includes('google.com')
+    );
+    if (directLink) {
+      applyLink = directLink.link;
+    }
+  }
+
+  return {
+    title: job.title || '',
+    company: job.company_name || '',
+    location: job.location || '',
+    link: applyLink
+  };
+});
+
+// --- COURSES Extraction ---
+const courses = coursesData.map(course => ({
+  title: course.title || '',
+  link: course.link
+    
+}));
+
+// --- FINAL Output ---
+return [
+  {
+    json: {
+      summary: `Found ${jobs.length} jobs and ${courses.length} courses for you.`,
+      jobs:$('job').first().json.jobs_results[0],
+      courses:$input.first().json.related_questions[0].references
+    }
+  }
+];
